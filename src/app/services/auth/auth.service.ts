@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 interface Response {
-  message: string,
-  status: number,
-  data: any
+  message: string;
+  status: number;
+  data: any;
 }
 
 @Injectable({
@@ -15,13 +15,16 @@ interface Response {
 })
 export class AuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
-  
+
+  verifyToken(): Observable<any> {
+    return this.httpClient.get(`${environment.api_url}/safe/verify`);
+  }
+
   login(email, password): Observable<any> {
-    return this.httpClient
-      .post(`${environment.api_url}/api/user/login`, {
-        email: email,
-        password: password,
-      })
+    return this.httpClient.post(`${environment.api_url}/api/user/login`, {
+      email: email,
+      password: password,
+    });
     // if(res.status == 200){
     //   this.setToken(res.data.token);
     // }
@@ -29,7 +32,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
   }
 
   getToken(): string {

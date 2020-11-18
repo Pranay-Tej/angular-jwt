@@ -5,27 +5,28 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-
-  constructor(private authService:AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    this.authService.verifyToken().subscribe((data) => {
+      if (data.user !== null) {
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   // email: string;
   // password: string;
 
-  login(email, password){
-    this.authService.login(email, password).subscribe(
-      data => {
-        if(data.token !== null){
-          this.authService.setToken(data.token);
-          this.router.navigate(['/home']);
-        }
+  login(email, password) {
+    this.authService.login(email, password).subscribe((data) => {
+      if (data.token !== null) {
+        this.authService.setToken(data.token);
+        this.router.navigate(['/home']);
       }
-    )
+    });
   }
-
 }
